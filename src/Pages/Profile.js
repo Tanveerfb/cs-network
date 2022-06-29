@@ -7,13 +7,12 @@ export default function Profile() {
   const { user, updateDP, uploadDP, uploadProfileData } = useFireContext();
   const [displayName, setdisplayName] = useState(user.displayName || "");
   const [email, setemail] = useState(user.email);
-  const [phoneNumber, setphoneNumber] = useState(user.phoneNumber || "");
   const [DPArea, setDPArea] = useState(false);
   const [loading, setloading] = useState(false);
   const name = useRef();
   const photoURL = useRef();
   const file = useRef();
-  const phone = useRef();
+  const [error, seterror] = useState(null)
   const navigate = useNavigate();
 
   function handleDP(e) {
@@ -74,11 +73,11 @@ export default function Profile() {
             </>
           ) : (
             <>
-              <Form.Text>No profic picture available</Form.Text>
+              <Container className="text-center">
+                <Form.Text>No profic picture available</Form.Text>
+              </Container>
             </>
           )}
-          {user.photoURL ? (
-            <>
               <Button variant="dark" className="my-2" onClick={handleDP}>
                 Update profile picture?
               </Button>
@@ -105,10 +104,6 @@ export default function Profile() {
               ) : (
                 ""
               )}
-            </>
-          ) : (
-            ""
-          )}
           <Form.Group className="mb-2">
             <Form.Label>Display name</Form.Label>
             <Form.Control

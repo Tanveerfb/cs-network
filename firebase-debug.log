@@ -1,0 +1,33 @@
+[debug] [2022-06-29T02:06:22.394Z] ----------------------------------------------------------------------
+[debug] [2022-06-29T02:06:22.397Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Owner\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-06-29T02:06:22.397Z] CLI Version:   11.0.1
+[debug] [2022-06-29T02:06:22.398Z] Platform:      win32
+[debug] [2022-06-29T02:06:22.398Z] Node Version:  v18.0.0
+[debug] [2022-06-29T02:06:22.457Z] Time:          Wed Jun 29 2022 12:06:22 GMT+1000 (Australian Eastern Standard Time)
+[debug] [2022-06-29T02:06:22.457Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-06-29T02:06:22.630Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-06-29T02:06:22.630Z] > authorizing via signed-in user (tanveerfb@gmail.com)
+[debug] [2022-06-29T02:06:22.631Z] [iam] checking project cs-network-fire for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-06-29T02:06:22.636Z] > refreshing access token with scopes: []
+[debug] [2022-06-29T02:06:22.638Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-06-29T02:06:23.133Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","date":"Wed, 29 Jun 2022 02:06:23 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-06-29T02:06:23.587Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs-network-fire:testIamPermissions [none]
+[debug] [2022-06-29T02:06:23.587Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs-network-fire:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-06-29T02:06:24.110Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs-network-fire:testIamPermissions 200
+[debug] [2022-06-29T02:06:24.111Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cs-network-fire:testIamPermissions {}
+[debug] [2022-06-29T02:06:24.111Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project cs-network-fire:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2022-06-29T02:06:24.113Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/cs-network-fire [none]
+[debug] [2022-06-29T02:06:24.602Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/cs-network-fire 403
+[debug] [2022-06-29T02:06:24.603Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/cs-network-fire {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2022-06-29T02:06:24.604Z] HTTP Error: 403, The caller does not have permission
+[debug] [2022-06-29T02:06:24.849Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at module.exports (C:\Users\Owner\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:47:12)
+    at RetryOperation._fn (C:\Users\Owner\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:286:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project cs-network-fire. Please make sure the project exists and your account has permission to access it.
