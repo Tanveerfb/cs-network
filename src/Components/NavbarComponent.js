@@ -17,19 +17,19 @@ export default function NavbarComponent() {
     <>
       {user ? (
         <>
-          <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container fluid>
               <Navbar.Brand href="/">CS Network</Navbar.Brand>
               <Navbar.Toggle aria-controls="nav" />
               <Navbar.Collapse id="nav">
                 <Nav className="me-auto">
-                  <Nav.Link href="/">Profile</Nav.Link>
+                  <Nav.Link href="/profile">Profile</Nav.Link>
                   <Nav.Link href="/friends">Friends</Nav.Link>
                   <Nav.Link href="/marks">Marks</Nav.Link>
                   <Nav.Link href="/inbox">Inbox</Nav.Link>
                 </Nav>
                 <Nav className="me-right">
-                  <Nav.Link>Welcome : {user.email}</Nav.Link>
+                  <Nav.Link>Welcome : {user.displayName? user.displayName: user.email}</Nav.Link>
                   <Button onClick={handleLogout} variant="secondary">
                     Logout
                   </Button>
@@ -40,7 +40,6 @@ export default function NavbarComponent() {
         </>
       ) : (
         <>
-        <Welcome/>
         </>
       )}
     </>

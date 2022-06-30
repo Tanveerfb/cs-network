@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Container, Button } from "react-bootstrap";
 import { useFireContext } from "../Context";
 import { useNavigate } from "react-router-dom";
+import Welcome from "../Components/Welcome";
 
 export default function Login() {
   const { loginusingEmailandPassword } = useFireContext();
@@ -23,19 +24,18 @@ export default function Login() {
   }
 
   return (
-    <Container>
+    <Container className="bg-cover text-white p-5">
+      <Welcome/>
       <h2 className="text-center">Login</h2>
       <Form>
         <Form.Group className="my-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
+          <Form.Label>Student/Staff email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" ref={email} />
-          <Form.Text className="text-muted">Required</Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" ref={password} />
-          <Form.Text className="text-muted">Required</Form.Text>
         </Form.Group>
         <Button
           disabled={loading}
@@ -43,13 +43,13 @@ export default function Login() {
           variant="primary"
           type="submit"
         >
-          Submit
+          Login
         </Button>
         <Button
           disabled={loading}
           href="signup"
           className="mx-2"
-          variant="outline-dark"
+          variant="danger"
           type="submit"
         >
           Create a account?

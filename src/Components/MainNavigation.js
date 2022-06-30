@@ -8,6 +8,7 @@ import Friends from "../Pages/Friends";
 import Marks from "../Pages/Marks";
 import Inbox from "../Pages/Inbox";
 import Welcome from "./Welcome";
+import NewsFeed from "../Pages/Newsfeed"
 
 function MainNavigation() {
   const { user, admin } = useFireContext();
@@ -18,7 +19,8 @@ function MainNavigation() {
         <Router>
           <NavbarComponent />
           <Routes>
-            <Route path="/" element={<Profile />} />
+            <Route path="/" element={<NewsFeed />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/marks" element={<Marks />} />
             <Route path="/inbox" element={<Inbox />} />
@@ -29,7 +31,6 @@ function MainNavigation() {
   } else {
     return (
       <Router>
-        <Welcome />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

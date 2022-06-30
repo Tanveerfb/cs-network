@@ -2,9 +2,10 @@ import React, { useRef, useState } from "react";
 import { Form, Container, Button } from "react-bootstrap";
 import { useFireContext } from "../Context";
 import { useNavigate } from "react-router-dom";
+import Welcome from "../Components/Welcome";
 
 export default function Signup() {
-  const { signupusingEmailandPassword } = useFireContext();
+  const { signupusingEmailandPassword, updateDP } = useFireContext();
   const navigate = useNavigate();
   const email = useRef();
   const password = useRef();
@@ -18,23 +19,25 @@ export default function Signup() {
         email.current.value,
         password.current.value
       );
+      await updateDP(
+        "https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
+      );
       navigate("/");
     } catch (err) {}
   }
   return (
-    <Container>
+    <Container className="bg-cover text-white p-5">
+      <Welcome/>
       <h2 className="text-center">Signup</h2>
       <Form>
         <Form.Group className="my-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" ref={email} />
-          <Form.Text className="text-muted">Required</Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" ref={password} />
-          <Form.Text className="text-muted">Required</Form.Text>
         </Form.Group>
         <Button
           disabled={loading}
@@ -42,13 +45,13 @@ export default function Signup() {
           variant="primary"
           type="submit"
         >
-          Submit
+          Sign up
         </Button>
         <Button
           disabled={loading}
           href="/"
           className="mx-2"
-          variant="outline-dark"
+          variant="danger"
           type="submit"
         >
           Already have a account?
