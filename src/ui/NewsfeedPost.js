@@ -27,13 +27,15 @@ export default function NewsfeedPost({}) {
   }, []);
   return (
     <>
+    <h3 className="text-center mb-5">Newsfeed</h3>
       {posts.map((e) => {
         return (
           <>
-            <Container className="d-flex p-2 mt-5 newsfeedPost">
+            <Container className="d-flex p-2 mt-2 borderLine">
               {e[0] ? (
                 <>
                   <Image
+                    className="avatar"
                     src={e[0]}
                     fluid
                     thumbnail
@@ -43,6 +45,7 @@ export default function NewsfeedPost({}) {
                 </>
               ) : (
                 <Image
+                className="avatar"
                   src={
                     "https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
                   }
@@ -52,13 +55,9 @@ export default function NewsfeedPost({}) {
               )}
               <Container>
                 <h5 className="text-center">
-                  {e[3]} shared the post on {e[1]}{" "}
+                  {e[3]} shared the post on {e[1]}
                 </h5>
-                <Form.Control
-                  className="text-center"
-                  readOnly
-                  defaultValue={e[2]}
-                ></Form.Control>
+                <p className="text-center text-justify">{e[2]}</p>
               </Container>
             </Container>
           </>

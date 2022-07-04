@@ -10,7 +10,18 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  setDoc,
+} from "firebase/firestore";
 
 const CSNetwork = React.createContext();
 
@@ -52,36 +63,66 @@ export function Context({ children }) {
   }
   async function uploadProfileData(user) {
     const dataRef = doc(db, "users", user.uid);
-    return setDoc(dataRef, {
-      displayName: user.displayName,
-      profilePicture: user.photoURL,
-      email: user.email,
-    });
+    return setDoc(
+      dataRef,
+      {
+        displayName: user.displayName,
+        profilePicture: user.photoURL,
+        email: user.email,
+      },
+      { merge: true }
+    );
+  }
+  async function addFriends(uid) {
+    const dataRef = doc(db, "users", user.uid);
+    return setDoc(
+      dataRef,
+      {
+        friends: arrayUnion(uid),
+      },
+      { merge: true }
+    );
+  }
+  async function removeFriends(uid) {
+    const dataRef = doc(db, "users", user.uid);
+    return setDoc(
+      dataRef,
+      {
+        friends: arrayRemove(uid),
+      },
+      { merge: true }
+    );
   }
   async function addPost(uid, text, adminPost) {
     if (adminPost == null) {
       adminPost = false;
     }
     const docID = new Date().getTime().toString();
-    const userCollection = doc(db, uid, docID);
-    const newsfeedCollection = doc(db, "newsfeed", docID);
-    const adminCollection = doc(db, "adminPosts", docID);
-    const userPost = await setDoc(userCollection, {
+    const userCollection = collection(db, "posts");
+    const newsfeedCollection = collection(db, "newsfeed");
+    const adminCollection = collection(db, "adminPosts");
+    const userDoc = doc(userCollection, uid);
+    const newsfeedDoc = doc(newsfeedCollection, uid);
+    const adminDoc = doc(adminCollection, uid);
+    const userPost = await setDoc(userDoc, {
       uid: uid,
       text: text,
       datePosted: new Date().toString(),
+      timestamp: docID,
     });
     if (adminPost) {
-      const adminPost = await setDoc(adminCollection, {
+      const adminPost = await setDoc(adminDoc, {
         uid: uid,
         text: text,
         datePosted: new Date().toString(),
+        timestamp: docID,
       });
     } else {
-      const feedPost = await setDoc(newsfeedCollection, {
+      const feedPost = await setDoc(newsfeedDoc, {
         uid: uid,
         text: text,
         datePosted: new Date().toString(),
+        timestamp: docID,
       });
     }
   }
@@ -95,13 +136,25 @@ export function Context({ children }) {
     const data = await getDoc(dataRef);
     return data.data().displayName;
   }
+  async function getFriends(uid) {
+    const dataRef = doc(db, "users", uid);
+    const data = await getDoc(dataRef);
+    return data.data().friends;
+  }
   async function getPosts(type) {
     if (type == "public") {
-      return getDocs(newsfeedCollection);
+      const q = query(newsfeedCollection, orderBy("datePosted", "desc"));
+      return getDocs(q);
     }
     if (type == "admin") {
-      return getDocs(adminCollection);
+      const q = query(adminCollection, orderBy("datePosted", "desc"));
+      return getDocs(q);
     }
+  }
+  async function getUserDetails() {
+    const userCollection = collection(db, "users");
+    const data = await getDocs(userCollection);
+    return data;
   }
 
   useEffect(() => {
@@ -132,6 +185,10 @@ export function Context({ children }) {
     getPosts,
     getProfilePicture,
     getDisplayName,
+    getUserDetails,
+    addFriends,
+    removeFriends,
+    getFriends,
   };
 
   return (

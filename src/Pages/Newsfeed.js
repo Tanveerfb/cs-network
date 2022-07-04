@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Container, Form, Button, ButtonGroup } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { useFireContext } from "../Context";
 import NewsfeedPost from "../ui/NewsfeedPost";
 
@@ -7,6 +8,8 @@ export default function Newsfeed() {
   const { user, addPost } = useFireContext();
   const [loading, setloading] = useState(false);
   const text = useRef();
+  const navigate = useNavigate();
+
   async function handlePost(e) {
     e.preventDefault();
     if (e.target.id == "postToPublic") {
@@ -14,6 +17,7 @@ export default function Newsfeed() {
         setloading(true);
         await addPost(user.uid, text.current.value);
         setloading(false);
+        navigate(0);
       } catch (err) {
         console.log(err);
       }
@@ -23,6 +27,7 @@ export default function Newsfeed() {
         setloading(true);
         await addPost(user.uid, text.current.value, true);
         setloading(false);
+        navigate(0);
       } catch (err) {
         console.log(err);
       }

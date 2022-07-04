@@ -4,7 +4,6 @@ import { useFireContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 import Welcome from "./Welcome";
 
-
 export default function NavbarComponent() {
   const { user, logOff } = useFireContext();
   const navigate = useNavigate();
@@ -24,12 +23,14 @@ export default function NavbarComponent() {
               <Navbar.Collapse id="nav">
                 <Nav className="me-auto">
                   <Nav.Link href="/profile">Profile</Nav.Link>
-                  <Nav.Link href="/friends">Friends</Nav.Link>
                   <Nav.Link href="/marks">Marks</Nav.Link>
                   <Nav.Link href="/inbox">Inbox</Nav.Link>
+                  <Nav.Link href="/friends">Search</Nav.Link>
                 </Nav>
                 <Nav className="me-right">
-                  <Nav.Link>Welcome : {user.displayName? user.displayName: user.email}</Nav.Link>
+                  <Nav.Link>
+                    Welcome : {user.displayName ? user.displayName : user.email}
+                  </Nav.Link>
                   <Button onClick={handleLogout} variant="secondary">
                     Logout
                   </Button>
@@ -39,8 +40,7 @@ export default function NavbarComponent() {
           </Navbar>
         </>
       ) : (
-        <>
-        </>
+        <></>
       )}
     </>
   );
