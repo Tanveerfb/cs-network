@@ -7,13 +7,13 @@
   border: 1px black solid;
 }
 .avatar {
-  vertical-align: middle;
-  width: 100px;
-  height: 100px;
+  object-fit: cover;
+  width: 5em;
+  height: 5em;
   border-radius: 50%;
 }
 .profilePicture {
-  vertical-align: middle;
+  object-fit: cover;
   width: 10em;
   height: 10em;
   border-radius: 50%;

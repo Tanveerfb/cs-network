@@ -44,7 +44,7 @@ export default function Newsfeed() {
           style={{ height: "100px" }}
           ref={text}
         ></Form.Control>
-        <ButtonGroup className="py-2">
+        <ButtonGroup className="d-flex my-2">
           <Button
             id="postToPublic"
             onClick={handlePost}

@@ -133,20 +133,18 @@ export default function Profile() {
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group className="mb-2">
-            <ButtonGroup>
-              <Button
-                disabled={loading}
-                onClick={handleProfileData}
-                variant="primary"
-              >
-                Save
-              </Button>
-              <Button variant="secondary" type="reset" className="mx-2">
-                Reset
-              </Button>
-            </ButtonGroup>
-          </Form.Group>
+          <ButtonGroup className="d-flex gap-2 my-3">
+            <Button
+              disabled={loading}
+              onClick={handleProfileData}
+              variant="primary"
+            >
+              Save
+            </Button>
+            <Button variant="secondary" type="reset" className="">
+              Reset
+            </Button>
+          </ButtonGroup>
         </Form>
       </Container>
       <FriendList uid={user.uid} />

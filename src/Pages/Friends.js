@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Container, Form, Button, ButtonGroup } from "react-bootstrap";
+import { Container, Form, Button, ButtonGroup, Image } from "react-bootstrap";
 import { useFireContext } from "../Context";
 
 export default function Friends() {
@@ -60,8 +60,12 @@ export default function Friends() {
           type="text"
           placeholder="Minimum 3 characters"
           ref={searchText}
+          required
         />
-        <ButtonGroup className="my-2">
+        <Form.Text className="text-muted">
+          Email address or display name
+        </Form.Text>
+        <ButtonGroup className="d-flex my-2">
           <Button type="submit" onClick={handleData}>
             Search
           </Button>
@@ -75,15 +79,18 @@ export default function Friends() {
                 {result.map((e) => {
                   return (
                     <>
-                      <Container className="d-flex justify-content-between borderLine p-2 my-2">
+                      <Container className="d-flex justify-content-between border p-2 my-2 align-items-center">
+                        <Image className="avatar" src={e[1].profilePicture} />
                         <h3 className="mx-2">{e[1].displayName}</h3>
-                        <Button
-                          value={e[0]}
-                          onClick={handleFollow}
-                          variant="outline-dark"
-                        >
-                          Follow
-                        </Button>
+                        <ButtonGroup className="mx-2">
+                          <Button
+                            value={e[0]}
+                            onClick={handleFollow}
+                            variant="outline-dark"
+                          >
+                            Follow
+                          </Button>
+                        </ButtonGroup>
                       </Container>
                     </>
                   );

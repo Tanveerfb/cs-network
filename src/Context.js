@@ -63,6 +63,11 @@ export function Context({ children }) {
   }
   async function uploadProfileData(user) {
     const dataRef = doc(db, "users", user.uid);
+    if (user.photoURL == null) {
+      await updateDP(
+        "https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
+      );
+    }
     return setDoc(
       dataRef,
       {
@@ -101,27 +106,27 @@ export function Context({ children }) {
     const userCollection = collection(db, "posts");
     const newsfeedCollection = collection(db, "newsfeed");
     const adminCollection = collection(db, "adminPosts");
-    const userDoc = doc(userCollection, uid);
-    const newsfeedDoc = doc(newsfeedCollection, uid);
-    const adminDoc = doc(adminCollection, uid);
+    const userDoc = doc(userCollection, docID);
+    const newsfeedDoc = doc(newsfeedCollection, docID);
+    const adminDoc = doc(adminCollection, docID);
     const userPost = await setDoc(userDoc, {
       uid: uid,
       text: text,
-      datePosted: new Date().toString(),
+      datePosted: new Date().toLocaleString(),
       timestamp: docID,
     });
     if (adminPost) {
       const adminPost = await setDoc(adminDoc, {
         uid: uid,
         text: text,
-        datePosted: new Date().toString(),
+        datePosted: new Date().toLocaleString(),
         timestamp: docID,
       });
     } else {
       const feedPost = await setDoc(newsfeedDoc, {
         uid: uid,
         text: text,
-        datePosted: new Date().toString(),
+        datePosted: new Date().toLocaleString(),
         timestamp: docID,
       });
     }

@@ -8,6 +8,7 @@ export default function NewsfeedPost({}) {
   const [postsView, setpostsView] = useState(false);
 
   async function handlePosts() {
+    setposts([]);
     const data = await getPosts("public");
     data.forEach((post) => {
       // console.log(post.data());
@@ -27,37 +28,24 @@ export default function NewsfeedPost({}) {
   }, []);
   return (
     <>
-    <h3 className="text-center mb-5">Newsfeed</h3>
+      <h3 className="text-center mb-5">Newsfeed</h3>
       {posts.map((e) => {
         return (
           <>
-            <Container className="d-flex p-2 mt-2 borderLine">
-              {e[0] ? (
-                <>
-                  <Image
-                    className="avatar"
-                    src={e[0]}
-                    fluid
-                    thumbnail
-                    roundedCircle
-                    width={"150"}
-                  />
-                </>
-              ) : (
-                <Image
-                className="avatar"
-                  src={
-                    "https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
-                  }
-                  thumbnail={true}
-                  width={"100"}
-                />
-              )}
-              <Container>
-                <h5 className="text-center">
-                  {e[3]} shared the post on {e[1]}
-                </h5>
-                <p className="text-center text-justify">{e[2]}</p>
+            <Container className="d-flex flex-column justify-content-around p-2 mt-2 border">
+              <Container fluid>
+                <h6 className="text-center bg-light p-2">{e[1]}</h6>
+              </Container>
+              <Container className="d-flex">
+                <Container className="d-flex flex-column align-items-center p-2 w-25">
+                  <Image className="avatar" src={e[0]} />
+                  <h5>{e[3]}</h5>
+                </Container>
+                <Container className="d-flex align-items-center w-75">
+                  <p className="text-center text-justify border p-2 bg-light w-100">
+                    {e[2]}
+                  </p>
+                </Container>
               </Container>
             </Container>
           </>
