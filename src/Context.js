@@ -18,6 +18,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   setDoc,
@@ -148,7 +149,7 @@ export function Context({ children }) {
   }
   async function getPosts(type) {
     if (type == "public") {
-      const q = query(newsfeedCollection, orderBy("datePosted", "desc"));
+      const q = query(newsfeedCollection, orderBy("timestamp", "desc"), limit(10));
       return getDocs(q);
     }
     if (type == "admin") {
