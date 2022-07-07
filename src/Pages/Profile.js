@@ -5,21 +5,12 @@ import { useFireContext } from "../Context";
 import FriendList from "../Components/FriendList";
 
 export default function Profile() {
-  const {
-    user,
-    updateDP,
-    uploadDP,
-    uploadProfileData,
-    getFriends,
-    getProfilePicture,
-    getDisplayName,
-  } = useFireContext();
+  const { user, updateDP, uploadDP, uploadProfileData, getMarks } =
+    useFireContext();
   const [displayName, setdisplayName] = useState(user.displayName || "");
   const [email, setemail] = useState(user.email);
   const [DPArea, setDPArea] = useState(false);
   const [loading, setloading] = useState(false);
-  const [friendsView, setfriendsView] = useState(false);
-  const [friendslist, setfriendslist] = useState([]);
   const name = useRef();
   const photoURL = useRef();
   const file = useRef();
@@ -90,9 +81,11 @@ export default function Profile() {
               </Container>
             </>
           )}
-          <Button variant="dark" className="my-2" onClick={handleDP}>
-            Update profile picture?
-          </Button>
+          <ButtonGroup className="d-flex">
+            <Button variant="dark" className="my-2" onClick={handleDP}>
+              Update profile picture?
+            </Button>
+          </ButtonGroup>
           {DPArea ? (
             <>
               <Container className="my-3">
@@ -103,14 +96,16 @@ export default function Profile() {
                   placeholder="URL of image"
                   ref={photoURL}
                 />
-                <Button
-                  disabled={loading}
-                  onClick={handleDPUpload}
-                  variant="primary"
-                  className="my-2"
-                >
-                  Update
-                </Button>
+                <ButtonGroup className="d-flex">
+                  <Button
+                    disabled={loading}
+                    onClick={handleDPUpload}
+                    variant="primary"
+                    className="my-2"
+                  >
+                    Update
+                  </Button>
+                </ButtonGroup>
               </Container>
             </>
           ) : (

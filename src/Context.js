@@ -17,6 +17,7 @@ import {
   collection,
   doc,
   getDoc,
+  getDocFromServer,
   getDocs,
   limit,
   orderBy,
@@ -80,7 +81,7 @@ export function Context({ children }) {
     );
   }
   async function addFriends(uid) {
-    const dataRef = doc(db, "users", user.uid);
+    const dataRef = doc(db, "friendlists", user.uid);
     return setDoc(
       dataRef,
       {
@@ -90,7 +91,7 @@ export function Context({ children }) {
     );
   }
   async function removeFriends(uid) {
-    const dataRef = doc(db, "users", user.uid);
+    const dataRef = doc(db, "friendlists", user.uid);
     return setDoc(
       dataRef,
       {
@@ -98,6 +99,16 @@ export function Context({ children }) {
       },
       { merge: true }
     );
+  }
+  async function sendMessage(uid, message) {
+    const receiverCollection = collection(db, "users", uid, "messages");
+    const messageID = new Date().getTime().toString();
+    const messageRef = doc(receiverCollection, messageID);
+    return await setDoc(messageRef, {
+      message: message,
+      sender: user.uid,
+      time: new Date().toLocaleString(),
+    });
   }
   async function addPost(uid, text, adminPost) {
     if (adminPost == null) {
@@ -143,13 +154,23 @@ export function Context({ children }) {
     return data.data().displayName;
   }
   async function getFriends(uid) {
-    const dataRef = doc(db, "users", uid);
+    const dataRef = doc(db, "friendlists", uid);
     const data = await getDoc(dataRef);
     return data.data().friends;
   }
+
+  async function getMarks(uid) {
+    const dataRef = doc(db, "marks", uid);
+    const data = await getDoc(dataRef);
+    return data;
+  }
   async function getPosts(type) {
     if (type == "public") {
-      const q = query(newsfeedCollection, orderBy("timestamp", "desc"), limit(10));
+      const q = query(
+        newsfeedCollection,
+        orderBy("timestamp", "desc"),
+        limit(10)
+      );
       return getDocs(q);
     }
     if (type == "admin") {
@@ -162,6 +183,16 @@ export function Context({ children }) {
     const data = await getDocs(userCollection);
     return data;
   }
+  async function updateMarks(UID, marksheet) {
+    const dataRef = doc(db, "marks", UID);
+    return setDoc(
+      dataRef,
+      {
+        marks: marksheet,
+      },
+      { merge: true }
+    );
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -172,7 +203,7 @@ export function Context({ children }) {
         }
       }
       uploadProfileData(user);
-      setPersistence(auth, browserSessionPersistence);
+      // setPersistence(auth, browserSessionPersistence);
       setloading(false);
     });
 
@@ -195,6 +226,9 @@ export function Context({ children }) {
     addFriends,
     removeFriends,
     getFriends,
+    updateMarks,
+    getMarks,
+    sendMessage,
   };
 
   return (
