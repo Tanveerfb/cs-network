@@ -8,7 +8,8 @@ import Friends from "../Pages/Friends";
 import Marks from "../Pages/Marks";
 import Inbox from "../Pages/Inbox";
 import Welcome from "./Welcome";
-import NewsFeed from "../Pages/Newsfeed"
+import NewsFeed from "../Pages/Newsfeed";
+import Conversation from "../Pages/Conversation";
 
 function MainNavigation() {
   const { user, admin } = useFireContext();
@@ -24,6 +25,7 @@ function MainNavigation() {
             <Route path="/friends" element={<Friends />} />
             <Route path="/marks" element={<Marks />} />
             <Route path="/inbox" element={<Inbox />} />
+            <Route path="/conversation" element={<Conversation />} />
           </Routes>
         </Router>
       </>

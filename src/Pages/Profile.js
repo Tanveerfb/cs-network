@@ -1,11 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { Container, Form, Button, ButtonGroup, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useFireContext } from "../Context";
 import FriendList from "../Components/FriendList";
 
 export default function Profile() {
-  const { user, updateDP, uploadDP, uploadProfileData, getMarks } =
+  const { user, updateDP, uploadDP, uploadDisplayName } =
     useFireContext();
   const [displayName, setdisplayName] = useState(user.displayName || "");
   const [email, setemail] = useState(user.email);
@@ -14,7 +14,6 @@ export default function Profile() {
   const name = useRef();
   const photoURL = useRef();
   const file = useRef();
-  const [error, seterror] = useState(null);
   const navigate = useNavigate();
 
   function handleDP(e) {
@@ -48,7 +47,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       setloading(true);
-      await uploadProfileData(name.current.value);
+      await uploadDisplayName(name.current.value);
       navigate(0);
     } catch (err) {
       console.log(err);
@@ -88,7 +87,7 @@ export default function Profile() {
           </ButtonGroup>
           {DPArea ? (
             <>
-              <Container className="my-3">
+              <Container className="my-3 p-3 border">
                 <Form.Control type="file" accept="image/*" ref={file} />
                 <Form.Label>Or</Form.Label>
                 <Form.Control

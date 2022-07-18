@@ -58,16 +58,16 @@ export function Context({ children }) {
   function logOff() {
     return signOut(auth);
   }
-  async function uploadProfileData(displayName) {
+  async function uploadDisplayName(displayName) {
     return updateProfile(user, {
       displayName: displayName,
     });
   }
   async function uploadProfileData(user) {
     const dataRef = doc(db, "users", user.uid);
-    if (user.photoURL == null) {
+    if (!user.photoURL) {
       await updateDP(
-        "https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
+        "https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png"
       );
     }
     return setDoc(
@@ -100,15 +100,63 @@ export function Context({ children }) {
       { merge: true }
     );
   }
+  async function registerchatbox(userArray) {
+    const userCollection = collection(db, "users");
+    const boxID = userArray[0] + userArray[1];
+    for (const user of userArray) {
+      const messageRef = doc(userCollection, user);
+      await setDoc(
+        messageRef,
+        {
+          chatbox: arrayUnion(boxID),
+        },
+        { merge: true }
+      );
+    }
+  }
   async function sendMessage(uid, message) {
-    const receiverCollection = collection(db, "users", uid, "messages");
-    const messageID = new Date().getTime().toString();
-    const messageRef = doc(receiverCollection, messageID);
-    return await setDoc(messageRef, {
-      message: message,
-      sender: user.uid,
-      time: new Date().toLocaleString(),
+    const receiverCollection = collection(db, "chatbox");
+    const messageRef = doc(receiverCollection, uid + user.uid);
+    const userList = [uid, user.uid];
+    const otherDisplayName = await getDisplayName(uid);
+    await setDoc(
+      messageRef,
+      {
+        messages: arrayUnion(user.displayName + "_" + message),
+        participants: userList,
+        name: user.displayName + " & " + otherDisplayName,
+      },
+      { merge: true }
+    );
+    return await registerchatbox(userList);
+  }
+  async function addReply(docID, message) {
+    const messageRef = doc(db, "chatbox", docID);
+    return await setDoc(
+      messageRef,
+      {
+        messages: arrayUnion(user.displayName + "_" + message),
+        sender: user.displayName,
+        time: arrayUnion(new Date().toLocaleString()),
+      },
+      { merge: true }
+    );
+  }
+
+  async function getInbox(user) {
+    var result = [];
+    const inboxCollection = collection(db, "chatbox");
+    const docs = await getDocs(inboxCollection);
+    docs.forEach((doc) => {
+      if (doc.id.includes(user.uid)) {
+        result.push(doc);
+      }
     });
+    return result;
+  }
+  async function getMessages(boxID) {
+    const document = doc(db, "chatbox", boxID);
+    return await getDoc(document);
   }
   async function addPost(uid, text, adminPost) {
     if (adminPost == null) {
@@ -118,27 +166,28 @@ export function Context({ children }) {
     const userCollection = collection(db, "posts");
     const newsfeedCollection = collection(db, "newsfeed");
     const adminCollection = collection(db, "adminPosts");
-    const userDoc = doc(userCollection, docID);
+    const userDoc = doc(userCollection, uid);
     const newsfeedDoc = doc(newsfeedCollection, docID);
     const adminDoc = doc(adminCollection, docID);
+    const date = new Date().toLocaleString();
     const userPost = await setDoc(userDoc, {
       uid: uid,
       text: text,
-      datePosted: new Date().toLocaleString(),
+      datePosted: date,
       timestamp: docID,
     });
     if (adminPost) {
       const adminPost = await setDoc(adminDoc, {
         uid: uid,
         text: text,
-        datePosted: new Date().toLocaleString(),
+        datePosted: date,
         timestamp: docID,
       });
     } else {
       const feedPost = await setDoc(newsfeedDoc, {
         uid: uid,
         text: text,
-        datePosted: new Date().toLocaleString(),
+        datePosted: date,
         timestamp: docID,
       });
     }
@@ -146,7 +195,11 @@ export function Context({ children }) {
   async function getProfilePicture(uid) {
     const dataRef = doc(db, "users", uid);
     const data = await getDoc(dataRef);
-    return data.data().profilePicture;
+    const pp = data.data().profilePicture;
+    if (pp == null || pp == undefined) {
+      pp = "https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png";
+    }
+    return pp;
   }
   async function getDisplayName(uid) {
     const dataRef = doc(db, "users", uid);
@@ -158,37 +211,43 @@ export function Context({ children }) {
     const data = await getDoc(dataRef);
     return data.data().friends;
   }
+  async function getUserDetails() {
+    const userCollection = collection(db, "users");
+    const data = await getDocs(userCollection);
+    return data;
+  }
 
-  async function getMarks(uid) {
-    const dataRef = doc(db, "marks", uid);
-    const data = await getDoc(dataRef);
+  async function addEventData(name, userArray) {
+    const dataRef = doc(db, "eventData", name);
+    return await setDoc(
+      dataRef,
+      {
+        participants: userArray,
+      },
+      { merge: true }
+    );
+  }
+  async function getEventData() {
+    const dataRef = collection(db, "eventData");
+    const data = await getDocs(dataRef);
     return data;
   }
   async function getPosts(type) {
     if (type == "public") {
-      const q = query(
-        newsfeedCollection,
-        orderBy("timestamp", "desc"),
-        limit(10)
-      );
-      return getDocs(q);
+      const q = getDocs(newsfeedCollection);
+      return q;
     }
     if (type == "admin") {
       const q = query(adminCollection, orderBy("datePosted", "desc"));
       return getDocs(q);
     }
   }
-  async function getUserDetails() {
-    const userCollection = collection(db, "users");
-    const data = await getDocs(userCollection);
-    return data;
-  }
-  async function updateMarks(UID, marksheet) {
-    const dataRef = doc(db, "marks", UID);
+  async function updateEventData(docID, userArray) {
+    const dataRef = doc(db, "eventData", docID);
     return setDoc(
       dataRef,
       {
-        marks: marksheet,
+        participants: userArray,
       },
       { merge: true }
     );
@@ -217,6 +276,7 @@ export function Context({ children }) {
     updateDP,
     uploadDP,
     uploadProfileData,
+    uploadDisplayName,
     logOff,
     addPost,
     getPosts,
@@ -226,9 +286,13 @@ export function Context({ children }) {
     addFriends,
     removeFriends,
     getFriends,
-    updateMarks,
-    getMarks,
+    addEventData,
+    updateEventData,
+    getEventData,
     sendMessage,
+    getInbox,
+    addReply,
+    getMessages,
   };
 
   return (

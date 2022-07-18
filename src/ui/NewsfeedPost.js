@@ -1,56 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { Container, Image, Form } from "react-bootstrap";
+import { Container, Image, Form, ListGroup } from "react-bootstrap";
 import { useFireContext } from "../Context";
+import Post from "./Post";
 
 export default function NewsfeedPost({}) {
   const { getPosts, getProfilePicture, getDisplayName } = useFireContext();
   const [posts, setposts] = useState([]);
-  const [postsView, setpostsView] = useState(false);
+  const [postData, setpostData] = useState([]);
+  const [ready, setready] = useState(false);
 
   async function handlePosts() {
     setposts([]);
     const data = await getPosts("public");
-    data.forEach((post) => {
-      // console.log(post.data());
-      const text = post.data().text;
-      const uid = post.data().uid;
-      const dateTime = post.data().datePosted;
-      getProfilePicture(uid).then((e) => {
-        getDisplayName(uid).then((f) => {
-          const post = [e, dateTime, text, f];
-          setposts((posts) => [...posts, post]);
+    data.forEach((p) => {
+      const text = p.data().text;
+      const uid = p.data().uid;
+      const dateTime = p.data().datePosted;
+      const post = [uid, dateTime, text];
+      setposts((posts) => [...posts, post]);
+    });
+  }
+  async function getPostData() {
+    setpostData([]);
+    posts.forEach((p) => {
+      console.log(p);
+      getDisplayName(p[0]).then((dp) => {
+        getProfilePicture(p[0]).then((pp) => {
+          setpostData((postData) => [...postData, [dp, pp, p[0], p[1], p[2]]]);
         });
       });
+      setready(true);
+      console.log(postData);
     });
   }
   useEffect(() => {
     handlePosts();
+    getPostData();
   }, []);
   return (
     <>
-      <h3 className="text-center mb-5">Newsfeed</h3>
-      {posts.map((e) => {
-        return (
-          <>
-            <Container className="d-flex flex-column justify-content-around p-2 mt-2 borderLine">
-              <Container className="border" fluid>
-                <h6 className="text-center bg-light p-2">{e[1]}</h6>
-              </Container>
-              <Container className="d-flex">
-                <Container className="d-flex flex-column align-items-center p-2 w-25 border">
-                  <Image className="avatar" src={e[0]} />
-                  <h5>{e[3]}</h5>
-                </Container>
-                <Container className="d-flex align-items-center w-75">
-                  <p className="text-center text-justify border border-secondary p-2 bg-light w-100">
-                    {e[2]}
-                  </p>
-                </Container>
-              </Container>
-            </Container>
-          </>
-        );
-      })}
+      {ready ? (
+        <>
+          <h3 className="text-center mb-5">Newsfeed</h3>
+          <ListGroup>
+            {postData.map((e) => {
+              return (
+                <>
+                  <ListGroup.Item>
+                    <Post
+                      displayName={e[0]}
+                      profilePicture={e[1]}
+                      time={e[5]}
+                      content={e[4]}
+                    />
+                  </ListGroup.Item>
+                </>
+              );
+            })}
+          </ListGroup>
+        </>
+      ) : (
+        <Container>
+          <h2 className="text-center">There are no posts here</h2>
+        </Container>
+      )}
     </>
   );
 }

@@ -1,34 +1,17 @@
 import React, { useRef, useState } from "react";
-import {
-  Container,
-  Form,
-  Button,
-  ButtonGroup,
-  Image,
-  Table,
-} from "react-bootstrap";
+import { Container, Form, Button, ButtonGroup, Image } from "react-bootstrap";
 import { useFireContext } from "../Context";
 
 export default function Friends() {
   const searchText = useRef();
   const [result, setresult] = useState([]);
   const [resultView, setresultView] = useState(false);
-  const [marksTable, setmarksTable] = useState(false);
-  const [loading, setloading] = useState(false);
-  const [targetUserID, settargetUserID] = useState(null);
-  var targetUserMarks = [];
-  const firstMarks = useRef();
-  const secondMarks = useRef();
-  const thirdMarks = useRef();
-  const fourthMarks = useRef();
-  const fifthMarks = useRef();
-  const { getUserDetails, addFriends, removeFriends, admin, updateMarks } =
+  const { getUserDetails, addFriends, removeFriends } =
     useFireContext();
 
   async function handleData(e) {
     e.preventDefault();
     // console.log(searchText.current.value.length);
-    setmarksTable(false);
     setresult([]);
     try {
       const data = await getUserDetails();
@@ -68,32 +51,6 @@ export default function Friends() {
       }
     }
   }
-  function handleMarks(e) {
-    e.preventDefault();
-    settargetUserID(e.target.value);
-    // console.log(targetUserID);
-    setmarksTable(!marksTable);
-  }
-  async function handleSubmitMarks(e) {
-    setloading(true);
-    const sheet = [
-      firstMarks.current.value,
-      secondMarks.current.value,
-      thirdMarks.current.value,
-      fourthMarks.current.value,
-      fifthMarks.current.value,
-    ];
-    targetUserMarks = sheet;
-    console.log(targetUserMarks);
-    try {
-      await updateMarks(targetUserID, targetUserMarks);
-      console.log("Done updating marks");
-      setmarksTable(false);
-      setloading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   return (
     <Container>
@@ -126,20 +83,6 @@ export default function Friends() {
                         <Image className="avatar" src={e[1].profilePicture} />
                         <h3 className="mx-2">{e[1].displayName}</h3>
                         <ButtonGroup className="mx-2">
-                          {admin ? (
-                            <>
-                              <Button
-                                value={e[0]}
-                                className="mx-2"
-                                onClick={handleMarks}
-                                variant="outline-danger"
-                              >
-                                Add marks
-                              </Button>
-                            </>
-                          ) : (
-                            ""
-                          )}
                           <Button
                             value={e[0]}
                             onClick={handleFollow}
@@ -149,104 +92,6 @@ export default function Friends() {
                           </Button>
                         </ButtonGroup>
                       </Container>
-                      {marksTable ? (
-                        <>
-                          <Table striped bordered hover size="sm">
-                            <thead>
-                              <tr>
-                                <th>#</th>
-                                <th>Subject name</th>
-                                <th>Marks</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>Applied Project - 1 </td>
-                                <td>
-                                  <Form.Control
-                                    placeholder="Enter marks here"
-                                    type={"number"}
-                                    min="0"
-                                    max={"100"}
-                                    defaultValue="0"
-                                    ref={firstMarks}
-                                  ></Form.Control>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>Applied Project - 2 </td>
-                                <td>
-                                  <Form.Control
-                                    placeholder="Enter marks here"
-                                    type={"number"}
-                                    min="0"
-                                    max={"100"}
-                                    defaultValue="0"
-                                    ref={secondMarks}
-                                  ></Form.Control>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>Object Oriented Programming</td>
-                                <td>
-                                  <Form.Control
-                                    placeholder="Enter marks here"
-                                    type={"number"}
-                                    min="0"
-                                    max={"100"}
-                                    defaultValue="0"
-                                    ref={thirdMarks}
-                                  ></Form.Control>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>4</td>
-                                <td>Communications and Technology</td>
-                                <td>
-                                  <Form.Control
-                                    placeholder="Enter marks here"
-                                    type={"number"}
-                                    min="0"
-                                    max={"100"}
-                                    defaultValue="0"
-                                    ref={fourthMarks}
-                                  ></Form.Control>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>5</td>
-                                <td>Developing Web Information Systems</td>
-                                <td>
-                                  <Form.Control
-                                    placeholder="Enter marks here"
-                                    type={"number"}
-                                    min="0"
-                                    max={"100"}
-                                    defaultValue="0"
-                                    ref={fifthMarks}
-                                  ></Form.Control>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                          <Form>
-                            <ButtonGroup className="d-flex">
-                              <Button
-                                type="submit"
-                                disabled={loading}
-                                onClick={handleSubmitMarks}
-                              >
-                                Update marks
-                              </Button>
-                            </ButtonGroup>
-                          </Form>
-                        </>
-                      ) : (
-                        ""
-                      )}
                     </>
                   );
                 })}

@@ -1,137 +1,158 @@
-import React, { useEffect, useState } from "react";
-import { Container, Button, Table } from "react-bootstrap";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Container,
+  Button,
+  ListGroup,
+  ListGroupItem,
+  Form,
+  ButtonGroup,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { useFireContext } from "../Context";
 
 export default function Marks() {
-  const { user, getMarks } = useFireContext();
-  const [data, setdata] = useState();
-  const [marks, setmarks] = useState([]);
-  // const [second, setsecond] = useState(null);
-  // const [third, setthird] = useState(null);
-  // const [four, setfour] = useState(null);
-  // const [five, setfive] = useState(null);
+  const navigate = useNavigate();
+  const { getEventData, admin, addEventData } = useFireContext();
+  const [data, setdata] = useState([]);
   const [ready, setready] = useState(false);
+  const [loading, setloading] = useState(false);
+  const [addMarksBar, setaddMarksBar] = useState(false);
+  const [notification, setnotification] = useState(null);
+  const eventName = useRef();
+  const person1 = useRef();
+  const person2 = useRef();
+  const person3 = useRef();
 
-  useEffect(() => {
-    readMarks();
-  }, []);
-  function gradeMarks(mark) {
-    if (mark < 50) {
-      return "F";
-    } else if (mark > 49 && mark < 60) {
-      return "P";
-    } else if (mark > 59 && mark < 70) {
-      return "C";
-    } else if (mark > 69 && mark < 80) {
-      return "D";
-    } else if (mark > 79) {
-      return "HD";
+  async function handleAddData(e) {
+    e.preventDefault();
+    try {
+      setloading(true);
+      const userArray = [
+        person1.current.value,
+        person2.current.value,
+        person3.current.value,
+      ];
+      await addEventData(eventName.current.value, userArray);
+      setloading(false);
+      setnotification("Your data has been added.");
+      setaddMarksBar(!addMarksBar);
+      navigate(0);
+    } catch (err) {
+      console.log(err);
+      setloading(false);
     }
   }
-  function readMarks() {
-    getMarks(user.uid).then((arr) => {
-      // console.log(marks.data().marks);
-      arr.data().marks.forEach((mark) => {
-        setmarks((m) => [...m, mark]);
+  async function getData() {
+    try {
+      setdata([]);
+      const data = await getEventData();
+      data.forEach((d) => {
+        // console.log(d.id);
+        setdata((data) => [...data, [d.id, d.data().participants]]);
       });
       setready(true);
-    });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  function handleEventData() {
+    setaddMarksBar(!addMarksBar);
   }
 
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <>
       <Container className="my-2">
-        <h4 className="text-center">Marks</h4>
-      </Container>
-      <Container className="my-2">
-        {ready ? (
+        {admin ? (
           <>
-            <Table striped bordered hover className="my-2">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Subject name</th>
-                  <th>Grade</th>
-                  <th>Marks</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Applied Project - 1 </td>
-                  <td>{ready ? gradeMarks(marks[0]) : "loading"}</td>
-                  <td>{ready ? marks[0] : "loading"}</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Applied Project - 2 </td>
-                  <td>{gradeMarks(marks[1])}</td>
-                  <td>{marks[1]}</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Object Oriented Programming</td>
-                  <td>{gradeMarks(marks[2])}</td>
-                  <td>{marks[2]}</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Communications and Technology</td>
-                  <td>{gradeMarks(marks[3])}</td>
-                  <td>{marks[3]}</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Developing Web Information Systems</td>
-                  <td>{gradeMarks(marks[4])}</td>
-                  <td>{marks[4]}</td>
-                </tr>
-              </tbody>
-            </Table>
+            <ButtonGroup className="d-flex">
+              <Button
+                variant={addMarksBar ? "secondary" : "primary"}
+                onClick={handleEventData}
+              >
+                Add event data
+              </Button>
+            </ButtonGroup>
+            {addMarksBar ? (
+              <Container>
+                <h3 className="text-center mt-2">Add new marks</h3>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>New event name</Form.Label>
+                    <Form.Control
+                      placeholder="Event name"
+                      type="text"
+                      ref={eventName}
+                    />
+                  </Form.Group>
+                  <Form.Group className="my-2">
+                    <Form.Label>Enter names </Form.Label>
+                    <Form.Control
+                      placeholder="Person 1"
+                      type="text"
+                      ref={person1}
+                    />
+                    <Form.Control
+                      placeholder="Person 2"
+                      type="text"
+                      ref={person2}
+                    />
+                    <Form.Control
+                      placeholder="Person 3"
+                      type="text"
+                      ref={person3}
+                    />
+                  </Form.Group>
+                  <ButtonGroup className="d-flex my-2">
+                    <Button disabled={loading} onClick={handleAddData}>
+                      Add event data
+                    </Button>
+                    <Button type="reset" variant="secondary">
+                      Clear
+                    </Button>
+                  </ButtonGroup>
+                </Form>
+              </Container>
+            ) : (
+              ""
+            )}
           </>
         ) : (
-          <Table striped bordered hover className="my-2">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Subject name</th>
-                <th>Grade</th>
-                <th>Marks</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Applied Project - 1 </td>
-                <td>{"loading"}</td>
-                <td>{"loading"}</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Applied Project - 2 </td>
-                <td>{"loading"}</td>
-                <td>{"loading"}</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Object Oriented Programming</td>
-                <td>{"loading"}</td>
-                <td>{"loading"}</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Communications and Technology</td>
-                <td>{"loading"}</td>
-                <td>{"loading"}</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Developing Web Information Systems</td>
-                <td>{"loading"}</td>
-                <td>{"loading"}</td>
-              </tr>
-            </tbody>
-          </Table>
+          ""
+        )}
+        {ready ? (
+          <>
+            {data.map((d) => {
+              return (
+                <>
+                  <h4 className="text-center mt-5 p-2 text-white bg-secondary">
+                    {d[0]}
+                  </h4>
+                  <ListGroup
+                    className="text-center p-3 border"
+                    as={"ol"}
+                    numbered
+                  >
+                    <ListGroupItem as={"li"} variant="warning">
+                      {d[1][0]}
+                    </ListGroupItem>
+                    <ListGroupItem as={"li"} variant="primary">
+                      {d[1][1]}
+                    </ListGroupItem>
+                    <ListGroupItem as={"li"} variant="secondary">
+                      {d[1][2]}
+                    </ListGroupItem>
+                  </ListGroup>
+                </>
+              );
+            })}
+          </>
+        ) : (
+          <Container>
+            <h2 className="text-center">There are no marks available</h2>
+          </Container>
         )}
       </Container>
       )

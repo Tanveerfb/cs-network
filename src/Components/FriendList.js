@@ -67,6 +67,7 @@ export default function FriendList({ uid }) {
     setloading(true);
     try {
       await sendMessage(senderID, outgoingMessage.current.value, uid);
+      setsendMessageView(!sendMessageView);
     } catch (err) {
       console.log(err);
     }
@@ -74,7 +75,7 @@ export default function FriendList({ uid }) {
 
   return (
     <>
-      <Container className="d-grid gap-2 mt-3">
+      <Container className="d-grid mt-3">
         <Button
           className="d-flex justify-content-between align-items-center text-center"
           disabled={loading}
@@ -89,24 +90,24 @@ export default function FriendList({ uid }) {
         </Button>
       </Container>
       {friendsView ? (
-        <Container className="mt-4">
+        <>
           {friendslist.map((e) => {
             return (
-              <Container className="d-flex justify-content-between border p-2 my-2 align-items-center">
+              <Container className="d-flex justify-content-between border my-2 align-items-center">
                 <Image className="avatar" src={e[1]} />
                 <h3 className="mx-2">{e[0]}</h3>
-                <ButtonGroup>
+                <ButtonGroup className="d-flex justify-content-center p-2 flex-wrap">
                   <Button
                     value={e[2]}
                     onClick={messengerView}
-                    className="mx-2"
+                    className="m-2"
                     variant="outline-dark"
                   >
                     Message
                   </Button>
                   <Button
                     onClick={handleFollow}
-                    className="mx-2"
+                    className="m-2"
                     value={e[2]}
                     variant="outline-dark"
                   >
@@ -136,7 +137,7 @@ export default function FriendList({ uid }) {
           ) : (
             ""
           )}
-        </Container>
+        </>
       ) : (
         ""
       )}
