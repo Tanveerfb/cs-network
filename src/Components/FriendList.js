@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Form, Button, ButtonGroup, Image } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { useFireContext } from "../Context";
 
 export default function FriendList({ uid }) {
@@ -11,6 +12,7 @@ export default function FriendList({ uid }) {
     removeFriends,
     sendMessage,
   } = useFireContext();
+  const navigate = useNavigate();
   const [friendsView, setfriendsView] = useState(false);
   const [friendslist, setfriendslist] = useState([]);
   const [sendMessageView, setsendMessageView] = useState(false);
@@ -68,6 +70,7 @@ export default function FriendList({ uid }) {
     try {
       await sendMessage(senderID, outgoingMessage.current.value, uid);
       setsendMessageView(!sendMessageView);
+      navigate(0);
     } catch (err) {
       console.log(err);
     }

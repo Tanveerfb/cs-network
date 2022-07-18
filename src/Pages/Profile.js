@@ -141,7 +141,6 @@ export default function Profile() {
           </ButtonGroup>
         </Form>
       </Container>
-      <FriendList uid={user.uid} />
     </Container>
   );
 }

@@ -9,6 +9,7 @@ import {
   setPersistence,
   onAuthStateChanged,
   updateProfile,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import {
   addDoc,
@@ -43,6 +44,9 @@ export function Context({ children }) {
   }
   function loginusingEmailandPassword(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
+  }
+  async function sendPasswordReset(email) {
+    return await sendPasswordResetEmail(auth, email);
   }
   function updateDP(URL) {
     return updateProfile(user, {
@@ -273,6 +277,7 @@ export function Context({ children }) {
     admin,
     loginusingEmailandPassword,
     signupusingEmailandPassword,
+    sendPasswordReset,
     updateDP,
     uploadDP,
     uploadProfileData,
