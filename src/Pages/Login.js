@@ -25,6 +25,7 @@ export default function Login() {
       navigate("/");
     } catch (err) {
       setnotification("There is a problem with logging in.");
+      setloading(false);
     }
   }
   async function handlePasswordReset(e) {
