@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Form, Container, Button } from "react-bootstrap";
+import { Form, Container, Button, ButtonGroup } from "react-bootstrap";
 import { useFireContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 import Welcome from "../Components/Welcome";
@@ -27,7 +27,7 @@ export default function Signup() {
   }
   return (
     <Container className="bg-cover text-white p-5">
-      <Welcome/>
+      <Welcome />
       <h2 className="text-center">Signup</h2>
       <Form>
         <Form.Group className="my-3" controlId="formBasicEmail">
@@ -39,23 +39,25 @@ export default function Signup() {
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" ref={password} />
         </Form.Group>
-        <Button
-          disabled={loading}
-          onClick={handleUser}
-          variant="primary"
-          type="submit"
-        >
-          Sign up
-        </Button>
-        <Button
-          disabled={loading}
-          href="/"
-          className="mx-2"
-          variant="danger"
-          type="submit"
-        >
-          Already have a account?
-        </Button>
+        <ButtonGroup className="d-flex">
+          <Button
+            disabled={loading}
+            onClick={handleUser}
+            variant="primary"
+            type="submit"
+          >
+            Sign up
+          </Button>
+          <Button
+            disabled={loading}
+            href="/"
+            className="mx-2"
+            variant="danger"
+            type="submit"
+          >
+            Already have a account?
+          </Button>
+        </ButtonGroup>
       </Form>
     </Container>
   );
