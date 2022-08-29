@@ -26,6 +26,7 @@ export default function NavbarComponent() {
                   <Nav.Link href="/inbox">Inbox</Nav.Link>
                   <Nav.Link href="/marks">Events</Nav.Link>
                   <Nav.Link href="/friends">Search</Nav.Link>
+                  <Nav.Link href="/notifications">Notifications</Nav.Link>
                 </Nav>
                 <Nav className="me-right">
                   <Nav.Link>

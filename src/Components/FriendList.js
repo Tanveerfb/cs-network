@@ -96,7 +96,7 @@ export default function FriendList({ uid }) {
         <>
           {friendslist.map((e) => {
             return (
-              <Container className="d-flex justify-content-between border my-2 align-items-center">
+              <Container className="d-flex justify-content-between border my-2 p-2 align-items-center bg-white">
                 <Image className="avatar" src={e[1]} />
                 <h3 className="mx-2">{e[0]}</h3>
                 <ButtonGroup className="d-flex justify-content-center p-2 flex-wrap">

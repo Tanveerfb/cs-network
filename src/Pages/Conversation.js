@@ -41,11 +41,8 @@ export default function Conversation() {
     <>
       {ready ? (
         <>
-          <h2 className="text-center my-3">Chatroom of {chatRoomName}</h2>
-          <Container
-            fluid
-            className="d-flex flex-column mt-3 justify-content-center align-items-center border"
-          >
+          <Container className="d-flex flex-column mt-3 justify-content-center align-items-center border bg-white">
+            <h2 className="text-center my-3">Chatroom of {chatRoomName}</h2>
             {messages.map((m) => {
               console.log(sender.length);
               console.log(receiver.length);
@@ -71,12 +68,13 @@ export default function Conversation() {
                 );
               }
             })}
-            <Container
-              fluid
-              className="d-flex p-2 my-2 w-75 justify-content-center"
-            >
-              <Form.Control type="text" className="w-75" ref={message} />
-              <Button onClick={handleReply} className="">
+            <Container fluid className="d-flex p-2 my-2 w-75 flex-column">
+              <Form.Control className="text-center my-2"
+                type="text"
+                placeholder="Enter message"
+                ref={message}
+              />
+              <Button variant="success" onClick={handleReply} className="">
                 Send&nbsp;message
               </Button>
             </Container>

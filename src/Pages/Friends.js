@@ -53,8 +53,8 @@ export default function Friends() {
   }
 
   return (
-    <Container>
-      <Form className="my-5">
+    <Container className=" bg-white">
+      <Form className="my-5 p-2 bg-white">
         <Form.Label>Search</Form.Label>
         <Form.Control
           type="text"
@@ -75,11 +75,11 @@ export default function Friends() {
         <>
           {result ? (
             <>
-              <Container>
+              <Container className="p-2">
                 {result.map((e) => {
                   return (
                     <>
-                      <Container className="d-flex justify-content-between border p-2 my-2 align-items-center">
+                      <Container className="d-flex justify-content-between border p-2 my-2 align-items-center bg-white">
                         <Image className="avatar" src={e[1].profilePicture} />
                         <h3 className="mx-2">{e[1].displayName}</h3>
                         <ButtonGroup className="mx-2">

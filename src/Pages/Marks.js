@@ -64,7 +64,7 @@ export default function Marks() {
   }, []);
   return (
     <>
-      <Container className="my-2">
+      <Container className="my-2 bg-white">
         {admin ? (
           <>
             <ButtonGroup className="d-flex">
@@ -77,7 +77,7 @@ export default function Marks() {
             </ButtonGroup>
             {addMarksBar ? (
               <Container>
-                <h3 className="text-center mt-2">Add new marks</h3>
+                <h3 className="text-center mt-2">Add new data</h3>
                 <Form>
                   <Form.Group>
                     <Form.Label>New event name</Form.Label>

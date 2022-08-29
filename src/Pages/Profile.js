@@ -57,8 +57,8 @@ export default function Profile() {
 
   return (
     <Container>
-      <h4 className="text-center my-2">Profile Details </h4>
       <Container className="border p-3 bg-light">
+      <h4 className="text-center mb-5 bg-white">Profile Details </h4>
         <Form>
           {user.photoURL ? (
             <>

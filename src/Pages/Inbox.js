@@ -39,14 +39,14 @@ export default function Inbox() {
   }, []);
   return (
     <>
+      <Container className="bg-white">
+        <FriendList uid={user.uid} />
+      </Container>
       {ready ? (
         <>
-          <Container>
-            <FriendList uid={user.uid} />
-          </Container>
           <Container fluid className="my-2 p-2">
-            <h3 className="text-center my-3">Total messages</h3>
-            <Container fluid className="my-2">
+            <Container fluid className="my-2 p-2 bg-white">
+              <h3 className="text-center p-2 mb-4">Total messages</h3>
               <ul>
                 {messages[0] ? (
                   <>

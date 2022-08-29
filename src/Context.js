@@ -38,6 +38,39 @@ export function Context({ children }) {
   const [loading, setloading] = useState(true);
   const newsfeedCollection = collection(db, "newsfeed");
   const adminCollection = collection(db, "adminPosts");
+  const date = new Date().toLocaleString();
+
+  async function addFriendNotification(uid) {
+    const targetRef = doc(db, "notifications", uid);
+    const template = user.displayName + " has added you as a friend";
+    return await setDoc(
+      targetRef,
+      {
+        alerts: arrayUnion(template),
+      },
+      { merge: true }
+    );
+  }
+  async function adminNotification(text) {
+    const targetRef = doc(db, "notifications", "all");
+    const alert = text + " - " + date;
+    return await setDoc(
+      targetRef,
+      {
+        alerts: arrayUnion(alert),
+      },
+      { merge: true }
+    );
+  }
+  async function getNotifications(admin) {
+    if (admin) {
+      const targetRef = doc(db, "notifications", "all");
+      return await getDoc(targetRef);
+    } else {
+      const targetRef = doc(db, "notifications", user.uid);
+      return await getDoc(targetRef);
+    }
+  }
 
   function signupusingEmailandPassword(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -86,6 +119,7 @@ export function Context({ children }) {
   }
   async function addFriends(uid) {
     const dataRef = doc(db, "friendlists", user.uid);
+    await addFriendNotification(uid);
     return setDoc(
       dataRef,
       {
@@ -166,34 +200,34 @@ export function Context({ children }) {
     if (adminPost == null) {
       adminPost = false;
     }
-    const docID = new Date().getTime().toString();
+    const year = new Date().getFullYear().toString();
+    const month = new Date().getMonth().toString();
+    const date2 = new Date().getDate().toString();
+    console.log(year + month + date2);
+    const docID = year + month + date2;
     const userCollection = collection(db, "posts");
     const newsfeedCollection = collection(db, "newsfeed");
     const adminCollection = collection(db, "adminPosts");
-    const userDoc = doc(userCollection, uid);
     const newsfeedDoc = doc(newsfeedCollection, docID);
     const adminDoc = doc(adminCollection, docID);
-    const date = new Date().toLocaleString();
-    const userPost = await setDoc(userDoc, {
-      uid: uid,
-      text: text,
-      datePosted: date,
-      timestamp: docID,
-    });
     if (adminPost) {
-      const adminPost = await setDoc(adminDoc, {
-        uid: uid,
-        text: text,
-        datePosted: date,
-        timestamp: docID,
-      });
+      await setDoc(
+        adminDoc,
+        {
+          posts: arrayUnion(uid + " " + text),
+          time: arrayUnion(new Date().toLocaleTimeString()),
+        },
+        { merge: true }
+      );
     } else {
-      const feedPost = await setDoc(newsfeedDoc, {
-        uid: uid,
-        text: text,
-        datePosted: date,
-        timestamp: docID,
-      });
+      await setDoc(
+        newsfeedDoc,
+        {
+          posts: arrayUnion(uid + " " + text),
+          time: arrayUnion(new Date().toLocaleTimeString()),
+        },
+        { merge: true }
+      );
     }
   }
   async function getProfilePicture(uid) {
@@ -223,6 +257,7 @@ export function Context({ children }) {
 
   async function addEventData(name, userArray) {
     const dataRef = doc(db, "eventData", name);
+    await adminNotification("The 'Events' page has been updated");
     return await setDoc(
       dataRef,
       {
@@ -237,13 +272,19 @@ export function Context({ children }) {
     return data;
   }
   async function getPosts(type) {
+    const year = new Date().getFullYear().toString();
+    const month = new Date().getMonth().toString();
+    const date2 = new Date().getDate().toString();
+    const docID = year + month + date2;
+    const docRef = doc(newsfeedCollection, docID);
+    const docRefAdmin = doc(adminCollection, docID);
     if (type == "public") {
-      const q = getDocs(newsfeedCollection);
+      const q = getDoc(docRef);
       return q;
     }
     if (type == "admin") {
-      const q = query(adminCollection, orderBy("datePosted", "desc"));
-      return getDocs(q);
+      const q = getDoc(docRefAdmin);
+      return q;
     }
   }
   async function updateEventData(docID, userArray) {
@@ -298,6 +339,7 @@ export function Context({ children }) {
     getInbox,
     addReply,
     getMessages,
+    getNotifications,
   };
 
   return (

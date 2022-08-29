@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Image, Form, ListGroup } from "react-bootstrap";
+import { Container, Image } from "react-bootstrap";
 
 export default function Post({ displayName, profilePicture, time, content }) {
   return (

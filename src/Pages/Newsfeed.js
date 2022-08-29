@@ -29,13 +29,13 @@ export default function Newsfeed() {
         setloading(false);
         navigate(0);
       } catch (err) {
-        console.log(err);
+        console.log();
       }
     }
   }
 
   return (
-    <Container className="my-5">
+    <Container className="my-5 bg-white">
       <Container className="p-2">
         <h2 className="my-2">What's on your mind?</h2>
         <Form.Control
