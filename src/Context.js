@@ -42,7 +42,7 @@ export function Context({ children }) {
 
   async function addFriendNotification(uid) {
     const targetRef = doc(db, "notifications", uid);
-    const template = user.displayName + " has added you as a friend";
+    const template = user.displayName + " has added you as a friend" + " - " + date;
     return await setDoc(
       targetRef,
       {
@@ -205,7 +205,6 @@ export function Context({ children }) {
     const date2 = new Date().getDate().toString();
     console.log(year + month + date2);
     const docID = year + month + date2;
-    const userCollection = collection(db, "posts");
     const newsfeedCollection = collection(db, "newsfeed");
     const adminCollection = collection(db, "adminPosts");
     const newsfeedDoc = doc(newsfeedCollection, docID);

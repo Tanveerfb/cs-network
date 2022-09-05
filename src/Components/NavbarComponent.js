@@ -23,10 +23,11 @@ export default function NavbarComponent() {
               <Navbar.Collapse id="nav">
                 <Nav className="me-auto">
                   <Nav.Link href="/profile">Profile</Nav.Link>
+                  <Nav.Link href="/friends">Friends</Nav.Link>
                   <Nav.Link href="/inbox">Inbox</Nav.Link>
                   <Nav.Link href="/marks">Events</Nav.Link>
-                  <Nav.Link href="/friends">Search</Nav.Link>
                   <Nav.Link href="/notifications">Notifications</Nav.Link>
+                  <Nav.Link href="/search">Search</Nav.Link>
                 </Nav>
                 <Nav className="me-right">
                   <Nav.Link>

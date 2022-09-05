@@ -37,8 +37,7 @@ export default function FriendList({ uid }) {
       }
     }
   }
-  function handleFriends(e) {
-    e.preventDefault();
+  function handleFriends() {
     setloading(true);
     try {
       setfriendslist([]);
@@ -59,6 +58,10 @@ export default function FriendList({ uid }) {
       setloading(false);
     }
   }
+  useEffect(() => {
+    handleFriends();
+  }, []);
+
   function messengerView(e) {
     e.preventDefault();
     setsenderID(e.target.value);
@@ -78,7 +81,7 @@ export default function FriendList({ uid }) {
 
   return (
     <>
-      <Container className="d-grid mt-3">
+      {/* <Container className="d-grid mt-3">
         <Button
           className="d-flex justify-content-between align-items-center text-center"
           disabled={loading}
@@ -91,7 +94,7 @@ export default function FriendList({ uid }) {
             {!friendsView ? "Click to show" : "Click to Hide"}
           </Button>
         </Button>
-      </Container>
+      </Container> */}
       {friendsView ? (
         <>
           {friendslist.map((e) => {

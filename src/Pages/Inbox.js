@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { useFireContext } from "../Context";
 import { useNavigate } from "react-router-dom";
-import FriendList from "../Components/FriendList";
 
 export default function Inbox() {
   const { user, getInbox } = useFireContext();
@@ -39,9 +38,6 @@ export default function Inbox() {
   }, []);
   return (
     <>
-      <Container className="bg-white">
-        <FriendList uid={user.uid} />
-      </Container>
       {ready ? (
         <>
           <Container fluid className="my-2 p-2">

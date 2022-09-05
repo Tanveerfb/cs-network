@@ -23,7 +23,10 @@ export default function Signup() {
         "https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
       );
       navigate("/");
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+      setloading(false);
+    }
   }
   return (
     <Container className="bg-cover text-white p-5">
@@ -38,6 +41,9 @@ export default function Signup() {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" ref={password} />
+          <Form.Text className="text-white">
+            Minimum 6 character length
+          </Form.Text>
         </Form.Group>
         <ButtonGroup className="d-flex">
           <Button

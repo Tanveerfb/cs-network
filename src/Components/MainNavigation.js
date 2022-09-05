@@ -4,10 +4,10 @@ import { useFireContext } from "../Context";
 import Profile from "../Pages/Profile";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
-import Friends from "../Pages/Friends";
+import Search from "../Pages/Search";
 import Marks from "../Pages/Marks";
 import Inbox from "../Pages/Inbox";
-import Welcome from "./Welcome";
+import Friends from "../Pages/Friends";
 import NewsFeed from "../Pages/Newsfeed";
 import Conversation from "../Pages/Conversation";
 import Notifications from "../Pages/Notifications";
@@ -26,6 +26,7 @@ function MainNavigation() {
             <Route path="/friends" element={<Friends />} />
             <Route path="/marks" element={<Marks />} />
             <Route path="/inbox" element={<Inbox />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/conversation" element={<Conversation />} />
             <Route path="/notifications" element={<Notifications />} />
           </Routes>
