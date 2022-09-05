@@ -81,10 +81,10 @@ export default function NewsfeedPost() {
   return (
     <>
       <ButtonGroup className="d-flex">
-        <Button id="showPosts" onClick={handleButton} variant={"primary"}>
+        <Button id="showPosts" onClick={handleButton} variant={"secondary"}>
           Show posts
         </Button>
-        {admin ? (
+        {/* {admin ? (
           <>
             <Button
               id="showAdminPosts"
@@ -96,7 +96,7 @@ export default function NewsfeedPost() {
           </>
         ) : (
           ""
-        )}
+        )} */}
       </ButtonGroup>
       {ready ? (
         <>

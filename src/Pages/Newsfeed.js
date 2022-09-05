@@ -53,14 +53,14 @@ export default function Newsfeed() {
           >
             Post to public
           </Button>
-          <Button
+          {/* <Button
             disabled={loading}
             id="postToAdmin"
             onClick={handlePost}
             variant="danger"
           >
             Post to adminstrator
-          </Button>
+          </Button> */}
         </ButtonGroup>
       </Container>
       <Container>
